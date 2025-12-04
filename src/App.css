@@ -98,6 +98,7 @@ body, html {
   text-decoration: underline;
 }
 
+
 /*----CITAS----*/
 /* ===== LAYOUT GENERAL ===== */
 .layout {
@@ -277,3 +278,5 @@ body, html {
 .new-appointment-btn:hover {
   background: #047a6c;
 }
+
+/*---FORMULARIO-CITA---*/

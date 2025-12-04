@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaUser, FaUsers, FaCalendarAlt, FaUserMd, FaFileInvoice, FaChartBar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
@@ -11,18 +11,46 @@ export default function Citas() {
     navigate("/"); 
   };
 
-  const totals = {
+  // 🔥 ESTADO NUEVO (NO QUITÉ NADA, SOLO AGREGUÉ ESTO)
+  const [citas, setCitas] = useState([]);
+  const [resumen, setResumen] = useState({
+    total: 0,
+    confirmadas: 0,
+    pendientes: 0,
+    agendadas: 0
+  });
+
+  // 🔥 CARGAR DATOS DE LOCALSTORAGE (FORMULARIO)
+  useEffect(() => {
+    const stored = localStorage.getItem("citas");
+    if (stored) {
+      const data = JSON.parse(stored);
+      setCitas(data);
+
+      // Recalcular estadísticas automáticamente
+      const stats = {
+        total: data.length,
+        confirmadas: data.filter(c => c.estado === "Confirmada").length,
+        pendientes: data.filter(c => c.estado === "Pendiente").length,
+        agendadas: data.filter(c => c.estado === "Agendada").length
+      };
+      setResumen(stats);
+    }
+  }, []);
+
+  // 🔥 TUS DATOS ORIGINALES FUERON RESPETADOS (solo se usan si no hay nada en localStorage)
+  const appointments = citas.length > 0 ? citas : [
+    { fecha: "24/04/2024", paciente: "Carlos López", medico: "Dra. María García", estado: "Agendada" },
+    { fecha: "25/04/2024", paciente: "Ana García", medico: "Dr. Juan Pérez", estado: "Confirmada" },
+    { fecha: "26/04/2024", paciente: "María Rodríguez", medico: "Dra. Ana Rodríguez", estado: "Pendiente" }
+  ];
+
+  const totals = citas.length > 0 ? resumen : {
     total: 3,
     confirmadas: 1,
     pendientes: 1,
     agendadas: 1
   };
-
-  const appointments = [
-    { fecha: "24/04/2024", paciente: "Carlos López", medico: "Dra. María García", estado: "Agendada" },
-    { fecha: "25/04/2024", paciente: "Ana García", medico: "Dr. Juan Pérez", estado: "Confirmada" },
-    { fecha: "26/04/2024", paciente: "María Rodríguez", medico: "Dra. Ana Rodríguez", estado: "Pendiente" }
-  ];
 
   return (
     <div className="layout">
@@ -89,7 +117,10 @@ export default function Citas() {
         </table>
 
         {/* BOTÓN */}
-        <button className="new-appointment-btn">
+        <button 
+          className="new-appointment-btn"
+          onClick={() => navigate("/nueva-cita")} 
+        >
           Nueva cita
         </button>
 
