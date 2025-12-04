@@ -1,7 +1,7 @@
 import React from "react";
 import { FaUser, FaUsers, FaCalendarAlt, FaUserMd, FaFileInvoice, FaChartBar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import "./citas.css";
+import "../App.css";
 
 export default function Citas() {
 
