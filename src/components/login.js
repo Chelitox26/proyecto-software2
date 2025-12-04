@@ -1,7 +1,15 @@
 import React from "react";
-import "../App.css"; 
+import { useNavigate } from "react-router-dom";
+import "../App.css";
 
 export default function Login() {
+
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate("/citas");
+  };
+
   return (
     <div className="login-container">
       <div className="login-card">
@@ -25,7 +33,7 @@ export default function Login() {
           className="login-input"
         />
 
-        <button className="login-btn">
+        <button className="login-btn" onClick={handleLogin}>
           Iniciar sesión
         </button>
 
