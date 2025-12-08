@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
+// Firebase
+import { db } from "../firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+
 export default function NuevaCita() {
   const navigate = useNavigate();
 
@@ -13,26 +17,27 @@ export default function NuevaCita() {
   const [duracion, setDuracion] = useState("30 minutos");
   const [motivo, setMotivo] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const nuevaCita = {
-      id: Date.now(),
-      paciente,
-      medico,
-      fecha,
-      hora,
-      tipoConsulta,
-      duracion,
-      motivo,
-      estado: "Agendada"
-    };
+    try {
+      await addDoc(collection(db, "citas"), {
+        paciente,
+        medico,
+        fecha,
+        hora,
+        tipoConsulta,
+        duracion,
+        motivo,
+        estado: "Agendada",
+        fechaCreacion: serverTimestamp()
+      });
 
-    const stored = JSON.parse(localStorage.getItem("citas")) || [];
-    stored.push(nuevaCita);
-    localStorage.setItem("citas", JSON.stringify(stored));
+      navigate("/citas");
 
-    navigate("/citas");
+    } catch (error) {
+      console.error("Error al guardar cita:", error);
+    }
   };
 
   return (
@@ -105,6 +110,7 @@ export default function NuevaCita() {
             <button type="button" className="btn-cancel" onClick={() => navigate("/citas")}>
               Cancelar
             </button>
+
             <button type="submit" className="btn-add">
               Agendar Cita
             </button>
