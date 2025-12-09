@@ -98,17 +98,15 @@ body, html {
   text-decoration: underline;
 }
 
-
-/*----CITAS----*/
-/* ===== LAYOUT GENERAL ===== */
+/* ---- CITAS ---- */
+/* LAYOUT */
 .layout {
   display: flex;
   min-height: 100vh;
   background: #f5f7fa;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ===== SIDEBAR ===== */
+/* SIDEBAR */
 .sidebar {
   width: 260px;
   background: #059588;
@@ -148,13 +146,13 @@ body, html {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* ===== CONTENIDO PRINCIPAL ===== */
+/* MAIN */
 .main {
   flex: 1;
   padding: 30px 40px;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .header {
   display: flex;
   justify-content: space-between;
@@ -173,14 +171,13 @@ body, html {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 15px;
 }
 
 .logout-btn:hover {
   background: #c53030;
 }
 
-/* ===== TARJETAS CON ESTADÍSTICAS ===== */
+/* TARJETAS */
 .cards-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -208,7 +205,7 @@ body, html {
   font-weight: 600;
 }
 
-/* ===== TABLA ===== */
+/* TABLA */
 .appointments-table {
   width: 100%;
   border-collapse: collapse;
@@ -231,17 +228,12 @@ body, html {
   font-size: 16px;
 }
 
-.appointments-table tbody tr:hover {
-  background: #f9fafb;
-}
-
-/* ===== ESTADOS (Etiquetas de colores) ===== */
+/* ESTADOS */
 .status {
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 14px;
   font-weight: bold;
-  display: inline-block;
 }
 
 /* Verde agua */
@@ -262,7 +254,7 @@ body, html {
   color: #ca8a04;
 }
 
-/* ===== BOTÓN NUEVA CITA ===== */
+/* BOTÓN NUEVA CITA */
 .new-appointment-btn {
   margin-top: 35px;
   width: 100%;
@@ -279,8 +271,7 @@ body, html {
   background: #047a6c;
 }
 
-/*---FORMULARIO-CITA---*/
-/* Fondo oscuro detrás del modal */
+/* MODAL */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -292,7 +283,6 @@ body, html {
   z-index: 2000;
 }
 
-/* Ventana del modal */
 .modal-window {
   background: white;
   width: 650px;
@@ -356,6 +346,7 @@ body, html {
   margin-top: 20px;
 }
 
+/* BOTONES */
 .btn-cancel {
   background: white;
   border: 1px solid #ccc;
@@ -379,7 +370,7 @@ body, html {
   to { opacity: 1; transform: scale(1); }
 }
 
-/* === FORMULARIO DE REGISTRO === */
+/* ---------------- FORMULARIO DE REGISTRO ---------------- */
 
 .register-container {
   min-height: 100vh;
@@ -444,14 +435,15 @@ body, html {
   margin-top: 5px;
 }
 
+/* Layout general */
 .main-layout {
   display: flex;
   min-height: 100vh;
   background-color: #f5f7fb;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: system-ui, sans-serif;
 }
 
-/* Sidebar simple */
+/* Sidebar */
 .sidebar {
   width: 230px;
   background-color: #048b81;
@@ -480,7 +472,7 @@ body, html {
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Contenido principal */
+/* Contenido */
 .content {
   flex: 1;
   padding: 24px 32px;
@@ -496,7 +488,7 @@ body, html {
   color: #6b7280;
 }
 
-/* Tarjetas de resumen */
+/* Tarjetas */
 .cards-row {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -563,7 +555,7 @@ body, html {
   background-color: #f9fafb;
 }
 
-/* Badges de estado */
+/* Badges */
 .badge {
   display: inline-block;
   padding: 4px 10px;
@@ -587,7 +579,7 @@ body, html {
   color: #0369a1;
 }
 
-/* Botones de acciones */
+/* Acciones */
 .acciones-td {
   display: flex;
   flex-wrap: wrap;
@@ -623,7 +615,7 @@ body, html {
   color: white;
 }
 
-
+/* Logout */
 .header-with-logout {
   display: flex;
   justify-content: space-between;
@@ -644,7 +636,8 @@ body, html {
 .logout-btn:hover {
   background-color: #dc2626;
 }
-/* --- Modal general --- */
+
+/* MODAL GENERAL */
 .modal-container {
   position: fixed;
   inset: 0;
@@ -660,12 +653,12 @@ body, html {
   background: #fff;
   width: 100%;
   max-width: 700px;
-  max-height: 90vh;           /* 👈 no pasa del 90% de la altura */
+  max-height: 90vh;
   border-radius: 12px;
   padding: 25px 30px;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;           /* 👈 si es muy alto, se puede hacer scroll */
+  overflow-y: auto;
 }
 
 .modal-header {
@@ -685,7 +678,7 @@ body, html {
   margin-top: 20px;
 }
 
-/* inputs */
+/* Inputs */
 .input-label {
   font-weight: bold;
   margin-bottom: 6px;
@@ -706,7 +699,7 @@ body, html {
   height: 90px;
 }
 
-/* filas */
+/* Filas */
 .form-row {
   display: flex;
   gap: 15px;
@@ -716,7 +709,7 @@ body, html {
   flex: 1;
 }
 
-/* Footer siempre visible dentro del modal */
+/* Footer */
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -724,11 +717,12 @@ body, html {
   margin-top: 10px;
   padding-top: 10px;
   border-top: 1px solid #e5e7eb;
-  position: sticky;   /* 👈 se “pega” al fondo del modal */
+  position: sticky;
   bottom: 0;
   background: #fff;
 }
 
+/* BOTONES FORMULARIO */
 .cancel-btn {
   padding: 10px 16px;
   background: #ccc;
@@ -748,4 +742,157 @@ body, html {
 
 .submit-btn:hover {
   background: #027f65;
+}
+
+/* EDITAR CITA */
+.btn-edit {
+  background: #2563eb;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin-right: 6px;
+}
+
+.btn-edit:hover {
+  background: #1e40af;
+}
+
+.btn-cancel {
+  background: #dc2626;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #b91c1c;
+}
+
+/* FACTURACIÓN */
+
+/* Buscador */
+.invoice-search {
+  width: 350px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+/* Cards */
+.invoice-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.invoice-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.card-title {
+  color: #555;
+  margin: 0;
+}
+
+.card-value {
+  font-size: 28px;
+  margin-top: 6px;
+  font-weight: bold;
+}
+
+.card-value.green { color: #16a34a; }
+.card-value.yellow { color: #ca8a04; }
+.card-value.blue { color: #2563eb; }
+
+.icon-money {
+  color: #0d9488;
+  font-size: 18px;
+}
+
+/* Tabla */
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.invoice-table th {
+  background: #f0f2f5;
+  padding: 14px;
+  text-align: left;
+}
+
+.invoice-table td {
+  padding: 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Estados */
+.estado-tag {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.estado-tag.pagada {
+  background: #d1fae5;
+  color: #16a34a;
+}
+
+.estado-tag.pendiente {
+  background: #fef9c3;
+  color: #ca8a04;
+}
+
+.estado-tag.vencida {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Botón Nueva Factura */
+.btn-new-invoice {
+  padding: 10px 16px;
+  background: #059588;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-new-invoice:hover {
+  background: #047a6c;
+}
+
+/* Ver / Pagar / Acciones */
+.btn-view {
+  background: #e11d48;
+  color: white;
+  padding: 6px 15px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+.btn-pay {
+  background: #16a34a;
+  color: white;
+  padding: 6px 15px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-right: 6px;
 }

@@ -5,10 +5,17 @@ import {
   FaCalendarAlt,
   FaUserMd,
   FaFileInvoice,
-  FaChartBar,
+  FaChartBar
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+
+// Firebase
+import { db } from "../firebase";
+import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
+
+// Modal de edición
+import EditarCita from "../components/editarCita";
 
 export default function Citas() {
   const navigate = useNavigate();
@@ -25,31 +32,37 @@ export default function Citas() {
     agendadas: 0,
   });
 
-  // Cargar SOLO lo que haya en localStorage.citas
-  useEffect(() => {
-    const stored = localStorage.getItem("citas");
-    if (stored) {
-      const data = JSON.parse(stored);
-      setCitas(data);
+  const [editCita, setEditCita] = useState(null);
 
-      const stats = {
-        total: data.length,
-        confirmadas: data.filter((c) => c.estado === "Confirmada").length,
-        pendientes: data.filter((c) => c.estado === "Pendiente").length,
-        agendadas: data.filter((c) => c.estado === "Agendada").length,
-      };
-      setResumen(stats);
-    } else {
-      // si no hay nada, dejamos todo en cero
-      setCitas([]);
+  // 🔥 Escuchar cambios en tiempo real desde Firebase
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "citas"), (snapshot) => {
+      const lista = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      setCitas(lista);
+
       setResumen({
-        total: 0,
-        confirmadas: 0,
-        pendientes: 0,
-        agendadas: 0,
+        total: lista.length,
+        confirmadas: lista.filter((c) => c.estado === "Confirmada").length,
+        pendientes: lista.filter((c) => c.estado === "Pendiente").length,
+        agendadas: lista.filter((c) => c.estado === "Agendada").length
       });
-    }
+    });
+
+    return () => unsub();
   }, []);
+
+  // ❌ Cancelar cita
+  const handleCancel = async (id) => {
+    if (!window.confirm("¿Deseas cancelar esta cita?")) return;
+
+    await updateDoc(doc(db, "citas", id), {
+      estado: "Cancelada"
+    });
+  };
 
   return (
     <div className="layout">
@@ -60,26 +73,31 @@ export default function Citas() {
         </div>
 
         <ul>
-          <li>
+          <li onClick={() => navigate("/pacientes")}>
             <FaUsers /> Pacientes
           </li>
-          <li className="active">
+
+          <li className="active" onClick={() => navigate("/citas")}>
             <FaCalendarAlt /> Citas
           </li>
-          <li>
+
+          <li onClick={() => navigate("/medicos")}>
             <FaUserMd /> Médicos
           </li>
-          <li>
+
+          <li onClick={() => navigate("/facturacion")}>
             <FaFileInvoice /> Facturación
           </li>
-          <li>
+
+          <li onClick={() => navigate("/reportes")}>
             <FaChartBar /> Reportes
           </li>
         </ul>
       </aside>
 
-      {/* CONTENIDO */}
+      {/* CONTENIDO PRINCIPAL */}
       <main className="main">
+
         {/* HEADER */}
         <header className="header">
           <h1>Gestión de Citas</h1>
@@ -88,7 +106,7 @@ export default function Citas() {
           </button>
         </header>
 
-        {/* CARDS */}
+        {/* TARJETAS RESUMEN */}
         <div className="cards-container">
           <div className="card">
             <h2>{resumen.total}</h2>
@@ -116,40 +134,57 @@ export default function Citas() {
               <th>Paciente</th>
               <th>Médico</th>
               <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
 
           <tbody>
-            {citas.length === 0 ? (
-              <tr>
-                <td colSpan="4" style={{ textAlign: "center", padding: "16px" }}>
-                  No hay citas registradas. Usa el botón &quot;Nueva cita&quot; para agregar una.
+            {citas.map((cita) => (
+              <tr key={cita.id}>
+                <td>{cita.fecha}</td>
+                <td>{cita.paciente}</td>
+                <td>{cita.medico}</td>
+                <td>
+                  <span className={`status ${cita.estado?.toLowerCase()}`}>
+                    {cita.estado}
+                  </span>
+                </td>
+
+                <td>
+                  <button
+                    className="btn-edit"
+                    onClick={() => setEditCita(cita)}
+                  >
+                    Editar
+                  </button>
+
+                  <button
+                    className="btn-cancel"
+                    onClick={() => handleCancel(cita.id)}
+                  >
+                    Cancelar
+                  </button>
                 </td>
               </tr>
-            ) : (
-              citas.map((cita, i) => (
-                <tr key={i}>
-                  <td>{cita.fecha}</td>
-                  <td>{cita.paciente}</td>
-                  <td>{cita.medico}</td>
-                  <td>
-                    <span className={`status ${cita.estado.toLowerCase()}`}>
-                      {cita.estado}
-                    </span>
-                  </td>
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
 
-        {/* BOTÓN */}
+        {/* BOTÓN AGREGAR CITA */}
         <button
           className="new-appointment-btn"
           onClick={() => navigate("/nueva-cita")}
         >
           Nueva cita
         </button>
+
+        {/* MODAL EDITAR */}
+        {editCita && (
+          <EditarCita
+            cita={editCita}
+            onClose={() => setEditCita(null)}
+          />
+        )}
       </main>
     </div>
   );
