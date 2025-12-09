@@ -4,6 +4,13 @@ import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import "../App.css";
 
+//Lista de correos que se consideran MÉDICOS 
+const MEDICOS = [
+  "medico1@gmail.com",
+  "medico2@gmail.com",
+  
+];
+
 export default function Login() {
 
   const navigate = useNavigate();
@@ -18,7 +25,13 @@ export default function Login() {
       // Firebase Login
       await signInWithEmailAndPassword(auth, email, pass);
 
-      navigate("/citas");
+      const userEmail = email.toLowerCase();
+
+      if (MEDICOS.includes(userEmail)) {
+        navigate("/medico");
+      } else {
+        navigate("/citas");
+      }
 
     } catch (err) {
       console.log(err);
