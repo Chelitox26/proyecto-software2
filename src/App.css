@@ -471,3 +471,126 @@ body, html {
 .btn-cancel:hover {
   background: #b91c1c;
 }
+
+/*FACTURACION*/
+/* BUSCADOR */
+.invoice-search {
+  width: 350px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+/* CARDS */
+.invoice-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.invoice-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.card-title {
+  color: #555;
+  margin: 0;
+}
+
+.card-value {
+  font-size: 28px;
+  margin-top: 6px;
+  font-weight: bold;
+}
+
+.card-value.green { color: #16a34a; }
+.card-value.yellow { color: #ca8a04; }
+.card-value.blue { color: #2563eb; }
+
+.icon-money {
+  color: #0d9488;
+  font-size: 18px;
+}
+
+/* TABLA */
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.invoice-table th {
+  background: #f0f2f5;
+  padding: 14px;
+  text-align: left;
+}
+
+.invoice-table td {
+  padding: 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* ESTADOS */
+.estado-tag {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.estado-tag.pagada {
+  background: #d1fae5;
+  color: #16a34a;
+}
+
+.estado-tag.pendiente {
+  background: #fef9c3;
+  color: #ca8a04;
+}
+
+.estado-tag.vencida {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* BOTONES */
+.btn-new-invoice {
+  padding: 10px 16px;
+  background: #059588;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-new-invoice:hover {
+  background: #047a6c;
+}
+
+.btn-view {
+  background: #e11d48;
+  color: white;
+  padding: 6px 15px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+.btn-pay {
+  background: #16a34a;
+  color: white;
+  padding: 6px 15px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin-right: 6px;
+}

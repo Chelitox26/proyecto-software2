@@ -18,6 +18,7 @@ import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import EditarCita from "../components/editarCita";
 
 export default function Citas() {
+
   const navigate = useNavigate();
 
   const [citas, setCitas] = useState([]);
@@ -30,7 +31,7 @@ export default function Citas() {
 
   const [editCita, setEditCita] = useState(null);
 
-  // 🔥 escuchar citas en tiempo real
+  // 🔥 Escuchar cambios en tiempo real desde Firebase
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "citas"), (snapshot) => {
       const lista = snapshot.docs.map((doc) => ({
@@ -40,7 +41,6 @@ export default function Citas() {
 
       setCitas(lista);
 
-      // resumen
       setResumen({
         total: lista.length,
         confirmadas: lista.filter((c) => c.estado === "Confirmada").length,
@@ -52,7 +52,7 @@ export default function Citas() {
     return () => unsub();
   }, []);
 
-  // 🔴 cancelar cita
+  // ❌ Cancelar cita
   const handleCancel = async (id) => {
     if (!window.confirm("¿Deseas cancelar esta cita?")) return;
 
@@ -65,21 +65,39 @@ export default function Citas() {
 
   return (
     <div className="layout">
+
+      {/* SIDEBAR */}
       <aside className="sidebar">
         <div className="user-section">
           <FaUser /> Usuario
         </div>
 
         <ul>
-          <li><FaUsers /> Pacientes</li>
-          <li className="active"><FaCalendarAlt /> Citas</li>
-          <li><FaUserMd /> Médicos</li>
-          <li><FaFileInvoice /> Facturación</li>
-          <li><FaChartBar /> Reportes</li>
+          <li onClick={() => navigate("/pacientes")}>
+            <FaUsers /> Pacientes
+          </li>
+
+          <li className="active" onClick={() => navigate("/citas")}>
+            <FaCalendarAlt /> Citas
+          </li>
+
+          <li onClick={() => navigate("/medicos")}>
+            <FaUserMd /> Médicos
+          </li>
+
+          <li onClick={() => navigate("/facturacion")}>
+            <FaFileInvoice /> Facturación
+          </li>
+
+          <li onClick={() => navigate("/reportes")}>
+            <FaChartBar /> Reportes
+          </li>
         </ul>
       </aside>
 
+      {/* CONTENIDO PRINCIPAL */}
       <main className="main">
+
         <header className="header">
           <h1>Gestión de Citas</h1>
           <button className="logout-btn" onClick={handleLogout}>
@@ -87,12 +105,24 @@ export default function Citas() {
           </button>
         </header>
 
-        {/* CARDS */}
+        {/* TARJETAS RESUMEN */}
         <div className="cards-container">
-          <div className="card"><h2>{resumen.total}</h2><p>Total Citas</p></div>
-          <div className="card"><h2>{resumen.confirmadas}</h2><p>Confirmadas</p></div>
-          <div className="card"><h2>{resumen.pendientes}</h2><p>Pendientes</p></div>
-          <div className="card"><h2>{resumen.agendadas}</h2><p>Agendadas</p></div>
+          <div className="card">
+            <h2>{resumen.total}</h2>
+            <p>Total Citas</p>
+          </div>
+          <div className="card">
+            <h2>{resumen.confirmadas}</h2>
+            <p>Confirmadas</p>
+          </div>
+          <div className="card">
+            <h2>{resumen.pendientes}</h2>
+            <p>Pendientes</p>
+          </div>
+          <div className="card">
+            <h2>{resumen.agendadas}</h2>
+            <p>Agendadas</p>
+          </div>
         </div>
 
         {/* TABLA */}
@@ -119,7 +149,6 @@ export default function Citas() {
                   </span>
                 </td>
 
-                {/* ACCIONES */}
                 <td>
                   <button
                     className="btn-edit"
@@ -140,6 +169,7 @@ export default function Citas() {
           </tbody>
         </table>
 
+        {/* BOTÓN AGREGAR CITA */}
         <button
           className="new-appointment-btn"
           onClick={() => navigate("/nueva-cita")}
@@ -147,13 +177,14 @@ export default function Citas() {
           Nueva cita
         </button>
 
-        {/* MODAL EDITAR CITA */}
+        {/* MODAL EDITAR */}
         {editCita && (
           <EditarCita
             cita={editCita}
             onClose={() => setEditCita(null)}
           />
         )}
+
       </main>
     </div>
   );
