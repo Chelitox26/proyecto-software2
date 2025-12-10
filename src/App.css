@@ -896,3 +896,160 @@ body, html {
   cursor: pointer;
   margin-right: 6px;
 }
+
+/* -------- MODAL NUEVO MÉDICO (ESTILO FIGMA) -------- */
+
+.modal-medico-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+}
+
+.modal-medico-window {
+  background: #ffffff;
+  width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 18px;
+  padding: 32px 40px;
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+/* TÍTULO */
+.modal-medico-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* FORM GRID GENERAL */
+.medico-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 26px;
+  margin-bottom: 25px;
+}
+
+.medico-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.medico-input,
+.medico-select,
+.medico-textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 15px;
+  background: #f9fafb;
+}
+
+.medico-select {
+  height: 45px;
+}
+
+.medico-textarea {
+  resize: none;
+  height: 110px;
+}
+
+/* SUBTÍTULO SECCIÓN */
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 18px 0 10px 0;
+}
+
+/* HORARIOS */
+.horarios-row {
+  display: flex;
+  gap: 25px;
+}
+
+.horario-item {
+  flex: 1;
+}
+
+/* CHECKBOXES FIGMA */
+.medico-days {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px 10px;
+  margin-top: 12px;
+}
+
+.medico-day {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+
+/* CHECKBOX FIGMA */
+.medico-day input[type="checkbox"] {
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #9ca3af;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: 0.2s ease;
+  background: white;
+}
+
+.medico-day input[type="checkbox"]:hover {
+  border-color: #059588;
+}
+
+.medico-day input[type="checkbox"]:checked {
+  background: #059588;
+  border-color: #059588;
+}
+
+.medico-day input[type="checkbox"]:checked::after {
+  content: "✔";
+  color: white;
+  font-size: 18px;
+  position: absolute;
+  top: -3px;
+  left: 5px;
+  font-weight: bold;
+}
+
+/* FOOTER BOTONES */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 25px;
+}
+
+.btn-cancelar {
+  padding: 10px 20px;
+  background: #d1d5db;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-guardar {
+  padding: 10px 22px;
+  background: #059588;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-guardar:hover {
+  background: #047a6c;
+}

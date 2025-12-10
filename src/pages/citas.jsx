@@ -34,7 +34,6 @@ export default function Citas() {
 
   const [editCita, setEditCita] = useState(null);
 
-  // 🔥 Escuchar cambios en tiempo real desde Firebase
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "citas"), (snapshot) => {
       const lista = snapshot.docs.map((doc) => ({
@@ -55,7 +54,7 @@ export default function Citas() {
     return () => unsub();
   }, []);
 
-  // ❌ Cancelar cita
+  //Cancelar cita
   const handleCancel = async (id) => {
     if (!window.confirm("¿Deseas cancelar esta cita?")) return;
 

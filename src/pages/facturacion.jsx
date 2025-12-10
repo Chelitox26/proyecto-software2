@@ -22,8 +22,8 @@ export default function Facturacion() {
   const navigate = useNavigate();
 
   const [facturas, setFacturas] = useState([]);
-  const [filtradas, setFiltradas] = useState([]); // ← LISTA FILTRADA
-  const [busqueda, setBusqueda] = useState(""); // ← TEXTO BUSCADOR
+  const [filtradas, setFiltradas] = useState([]);
+  const [busqueda, setBusqueda] = useState(""); 
   const [mostrarNuevaFactura, setMostrarNuevaFactura] = useState(false);
 
   const [totales, setTotales] = useState({
@@ -33,7 +33,6 @@ export default function Facturacion() {
     cantidad: 0,
   });
 
-  // 🔥 Escuchar facturas en tiempo real
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "facturas"), (snapshot) => {
       const lista = snapshot.docs.map((doc) => ({
@@ -42,7 +41,7 @@ export default function Facturacion() {
       }));
 
       setFacturas(lista);
-      aplicarFiltro(busqueda); // actualiza filtro al recibir datos
+      aplicarFiltro(busqueda); 
 
       // Cálculos automáticos
       const totalFacturado = lista.reduce((acc, f) => acc + (f.monto || 0), 0);
@@ -64,12 +63,12 @@ export default function Facturacion() {
     return () => unsub();
   }, []);
 
-  // 🔍 Aplicar filtro cuando cambia búsqueda o facturas
+  // filtro cuando cambia búsqueda o facturas
   useEffect(() => {
     aplicarFiltro(busqueda);
   }, [busqueda, facturas]);
 
-  // 🔥 Función de búsqueda
+  //Función de búsqueda
   const aplicarFiltro = (texto) => {
     texto = texto.toLowerCase();
 
