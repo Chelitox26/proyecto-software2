@@ -1,89 +1,160 @@
-import React, { useState, useEffect } from "react";
-import { FaUser, FaUsers, FaPhone, FaIdCard } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import "../App.css";
-
+import React, { useEffect, useState } from "react";
+import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
-import { collection, onSnapshot, addDoc } from "firebase/firestore";
+import "../App.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Pacientes() {
   const navigate = useNavigate();
-  const handleLogout = () => navigate("/");
-
   const [pacientes, setPacientes] = useState([]);
-  const [nuevo, setNuevo] = useState({ nombre: "", identidad: "", telefono: "" });
+  const [search, setSearch] = useState("");
+
+  const calcularEdad = (fecha) => {
+    if (!fecha) return "---";
+    const hoy = new Date();
+    const nac = new Date(fecha);
+    let edad = hoy.getFullYear() - nac.getFullYear();
+    const m = hoy.getMonth() - nac.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) edad--;
+    return edad + " años";
+  };
 
   useEffect(() => {
-    const ref = collection(db, "pacientes");
-    const unsub = onSnapshot(ref, (snap) => {
-      const lista = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    const unsub = onSnapshot(collection(db, "pacientes"), (snap) => {
+      const lista = snap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       setPacientes(lista);
     });
+
     return () => unsub();
   }, []);
 
-  const guardarPaciente = async () => {
-    if (!nuevo.nombre || !nuevo.identidad || !nuevo.telefono) return;
-    await addDoc(collection(db, "pacientes"), nuevo);
-    setNuevo({ nombre: "", identidad: "", telefono: "" });
-  };
+  const filtered = pacientes.filter((p) => {
+    const s = search.toLowerCase();
+    return (
+      p.nombre?.toLowerCase().includes(s) ||
+      p.apellido?.toLowerCase().includes(s) ||
+      p.cedula?.toLowerCase().includes(s) ||
+      p.telefono?.toLowerCase().includes(s)
+    );
+  });
+
+  const total = pacientes.length;
+  const mujeres = pacientes.filter((p) => p.genero === "F").length;
+  const hombres = pacientes.filter((p) => p.genero === "M").length;
+  const terceraEdad = pacientes.filter((p) => {
+    const edad = parseInt(calcularEdad(p.fechaNacimiento));
+    return edad >= 60;
+  }).length;
 
   return (
-    <div className="container">
-      <header className="header">
-        <h1><FaUsers /> Pacientes</h1>
-        <button onClick={handleLogout} className="logout-btn">Cerrar sesión</button>
-      </header>
+    <div className="layout">
+      
+      {/* SIDEBAR */}
+      <aside className="sidebar">
+        <div className="user-section">
+          <span>👤</span> Usuario
+        </div>
 
-      <div className="card resumen-card">
-        <h2>Resumen</h2>
-        <p>Total de pacientes: <strong>{pacientes.length}</strong></p>
-      </div>
+        <ul>
+          <li onClick={() => navigate("/pacientes")} className="active">Pacientes</li>
+          <li onClick={() => navigate("/citas")}>Citas</li>
+          <li onClick={() => navigate("/medicos")}>Médicos</li>
+          <li onClick={() => navigate("/facturacion")}>Facturación</li>
+          <li onClick={() => navigate("/reportes")}>Reportes</li>
+        </ul>
+      </aside>
 
-      <div className="card formulario-card">
-        <h2>Registrar nuevo paciente</h2>
+      {/* CONTENIDO PRINCIPAL */}
+      <main className="main">
+
+        <div className="header">
+          <h1>Gestión de Pacientes</h1>
+
+          <button
+            className="btn-new-invoice"
+            onClick={() => navigate("/nuevo-paciente")}
+          >
+            Nuevo Paciente
+          </button>
+        </div>
+
+        {/* BUSCADOR */}
         <input
           type="text"
-          placeholder="Nombre completo"
-          value={nuevo.nombre}
-          onChange={(e) => setNuevo({ ...nuevo, nombre: e.target.value })}
+          className="patient-search"
+          placeholder="Buscar pacientes por nombre, cédula o teléfono…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
-        <input
-          type="text"
-          placeholder="Número de identidad"
-          value={nuevo.identidad}
-          onChange={(e) => setNuevo({ ...nuevo, identidad: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Teléfono"
-          value={nuevo.telefono}
-          onChange={(e) => setNuevo({ ...nuevo, telefono: e.target.value })}
-        />
-        <button onClick={guardarPaciente} className="btn-guardar">Guardar</button>
-      </div>
 
-      <div className="card lista-card">
-        <h2><FaUser /> Lista de Pacientes</h2>        
-        <table className="tabla">
+        {/* CARDS */}
+        <div className="patient-cards">
+          <div className="patient-card">
+            <p className="title">Total Pacientes</p>
+            <p className="value blue">{total}</p>
+          </div>
+
+          <div className="patient-card">
+            <p className="title">Mujeres</p>
+            <p className="value green">{mujeres}</p>
+          </div>
+
+          <div className="patient-card">
+            <p className="title">Hombres</p>
+            <p className="value yellow">{hombres}</p>
+          </div>
+
+          <div className="patient-card">
+            <p className="title">Tercera Edad</p>
+            <p className="value purple">{terceraEdad}</p>
+          </div>
+        </div>
+
+        {/* TABLA */}
+        <table className="patient-table">
           <thead>
             <tr>
-              <th>Nombre</th>
-              <th>Identidad</th>
+              <th>Nombre Completo</th>
+              <th>Cédula</th>
               <th>Teléfono</th>
+              <th>Edad</th>
+              <th>Género</th>
+              <th>Fecha Registro</th>
             </tr>
           </thead>
+
           <tbody>
-            {pacientes.map((p) => (
+            {filtered.map((p) => (
               <tr key={p.id}>
-                <td>{p.nombre}</td>
-                <td>{p.identidad}</td>
+                <td>{p.nombre} {p.apellido}</td>
+                <td>{p.cedula}</td>
                 <td>{p.telefono}</td>
+                <td>{calcularEdad(p.fechaNacimiento)}</td>
+
+                <td>
+                  <span className={`gender-badge ${p.genero}`}>
+                    {p.genero}
+                  </span>
+                </td>
+
+                <td>{p.fechaRegistro || "---"}</td>
               </tr>
             ))}
+
+            {filtered.length === 0 && (
+              <tr>
+                <td colSpan="6" style={{ textAlign: "center", padding: "20px" }}>
+                  No hay resultados.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
-      </div>
+
+      </main>
     </div>
   );
 }
