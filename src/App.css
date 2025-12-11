@@ -271,7 +271,7 @@ body, html {
   background: #047a6c;
 }
 
-/* MODAL */
+/* MODAL CITAS*/
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -1135,4 +1135,113 @@ body, html {
 .gender-badge.M {
   background: #d4e8ff;
   color: #0054d0;
+}
+
+/* ========================================= */
+/*              NUEVO PACIENTE               */
+/* ========================================= */
+
+.paciente-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 4000;
+}
+
+/* VENTANA */
+.paciente-modal {
+  width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 18px;
+  padding: 28px 34px;
+  box-shadow: 0 5px 35px rgba(0,0,0,0.25);
+}
+
+/* HEADER */
+.paciente-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.paciente-title {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.paciente-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* GRID GENERAL */
+.paciente-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 26px;
+  margin-top: 18px;
+}
+
+/* CAMPOS */
+.paciente-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.paciente-input,
+.paciente-select,
+.paciente-textarea {
+  width: 100%;
+  background: #f9fafb;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+}
+
+.paciente-textarea {
+  height: 100px;
+  resize: none;
+}
+
+/* SECCIONES */
+.paciente-section {
+  margin-top: 28px;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+/* FOOTER */
+.paciente-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.paciente-btn-cancel {
+  padding: 10px 24px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+}
+
+.paciente-btn-save {
+  padding: 10px 24px;
+  background: #059588;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
 }

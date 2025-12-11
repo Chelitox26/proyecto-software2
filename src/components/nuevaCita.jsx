@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
 // Firebase
 import { db } from "../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, onSnapshot } from "firebase/firestore";
 
 export default function NuevaCita() {
   const navigate = useNavigate();
 
+  // 🔹 Campos del formulario
   const [paciente, setPaciente] = useState("");
   const [medico, setMedico] = useState("");
   const [fecha, setFecha] = useState("");
@@ -17,6 +18,40 @@ export default function NuevaCita() {
   const [duracion, setDuracion] = useState("30 minutos");
   const [motivo, setMotivo] = useState("");
 
+  // 🔹 Listas de Firebase
+  const [pacientesList, setPacientesList] = useState([]);
+  const [medicosList, setMedicosList] = useState([]);
+
+  // 📌 Cargar pacientes desde Firebase
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "pacientes"), (snap) => {
+      const data = snap.docs.map((doc) => ({
+        id: doc.id,
+        nombre: doc.data().nombre,
+        apellido: doc.data().apellido
+      }));
+
+      setPacientesList(data);
+    });
+
+    return () => unsub();
+  }, []);
+
+  // 📌 Cargar médicos desde Firebase
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "medicos"), (snap) => {
+      const data = snap.docs.map((doc) => ({
+        id: doc.id,
+        nombre: doc.data().nombre
+      }));
+
+      setMedicosList(data);
+    });
+
+    return () => unsub();
+  }, []);
+
+  // 📌 Guardar cita
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -51,20 +86,29 @@ export default function NuevaCita() {
 
         <form className="modal-body" onSubmit={handleSubmit}>
 
+          {/* PACIENTE */}
           <label>Paciente *</label>
           <select value={paciente} onChange={(e) => setPaciente(e.target.value)} required>
             <option value="">Seleccionar paciente</option>
-            <option>Juan Pérez</option>
-            <option>María López</option>
+            {pacientesList.map((p) => (
+              <option key={p.id} value={`${p.nombre} ${p.apellido}`}>
+                {p.nombre} {p.apellido}
+              </option>
+            ))}
           </select>
 
+          {/* MÉDICO */}
           <label>Médico *</label>
           <select value={medico} onChange={(e) => setMedico(e.target.value)} required>
             <option value="">Seleccionar médico</option>
-            <option>Dr. Ramírez</option>
-            <option>Dra. Santos</option>
+            {medicosList.map((m) => (
+              <option key={m.id} value={m.nombre}>
+                {m.nombre}
+              </option>
+            ))}
           </select>
 
+          {/* FECHA & HORA */}
           <div className="modal-row">
             <div>
               <label>Fecha *</label>
@@ -77,6 +121,7 @@ export default function NuevaCita() {
             </div>
           </div>
 
+          {/* TIPO CONSULTA */}
           <div className="modal-row">
             <div>
               <label>Tipo de Consulta *</label>
@@ -99,6 +144,7 @@ export default function NuevaCita() {
             </div>
           </div>
 
+          {/* MOTIVO */}
           <label>Motivo de la Consulta</label>
           <textarea
             placeholder="Describir el motivo de la consulta"

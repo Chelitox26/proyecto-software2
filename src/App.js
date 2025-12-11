@@ -10,34 +10,28 @@ import Medicos from "./pages/medicos.jsx";
 import Facturacion from "./pages/facturacion.jsx";
 import Reportes from "./pages/reportes.jsx";
 import MedicoCitas from "./pages/MedicoCitas";
-
-// Componentes
+import NuevoPaciente from "./components/nuevoPaciente.jsx";   
 import NuevaCita from "./components/nuevaCita";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* LOGIN */}
         <Route path="/" element={<Login />} />
-
-        {/* REGISTRO */}
         <Route path="/registro" element={<Register />} />
 
-        {/* CITAS */}
         <Route path="/citas" element={<Citas />} />
         <Route path="/nueva-cita" element={<NuevaCita />} />
 
-        {/* MEDICO (AGENDAR / VER CITAS DEL MÉDICO) */}
         <Route path="/medico" element={<MedicoCitas />} />
 
-        {/* OTRAS SECCIONES */}
+        {/* PACIENTES */}
         <Route path="/pacientes" element={<Pacientes />} />
+        <Route path="/nuevo-paciente" element={<NuevoPaciente />} /> {/* ✅ LISTO */}
+
         <Route path="/medicos" element={<Medicos />} />
         <Route path="/facturacion" element={<Facturacion />} />
         <Route path="/reportes" element={<Reportes />} />
-
       </Routes>
     </BrowserRouter>
   );

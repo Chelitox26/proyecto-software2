@@ -1,14 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "../firebase";
 import "../App.css";
+import {
+  FaUser,
+  FaUsers,
+  FaCalendarAlt,
+  FaUserMd,
+  FaFileInvoice,
+  FaChartBar,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+
+// Firebase
+import { db } from "../firebase";
+import { collection, onSnapshot } from "firebase/firestore";
+
+// Modal Nuevo Paciente
+import NuevoPaciente from "../components/nuevoPaciente";
 
 export default function Pacientes() {
   const navigate = useNavigate();
+
   const [pacientes, setPacientes] = useState([]);
   const [search, setSearch] = useState("");
+  const [mostrarModal, setMostrarModal] = useState(false);
 
+  // Calcular edad en base a fechaNacimiento
   const calcularEdad = (fecha) => {
     if (!fecha) return "---";
     const hoy = new Date();
@@ -19,6 +35,7 @@ export default function Pacientes() {
     return edad + " años";
   };
 
+  // Cargar pacientes desde Firebase
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "pacientes"), (snap) => {
       const lista = snap.docs.map((doc) => ({
@@ -31,6 +48,7 @@ export default function Pacientes() {
     return () => unsub();
   }, []);
 
+  // Filtro
   const filtered = pacientes.filter((p) => {
     const s = search.toLowerCase();
     return (
@@ -41,6 +59,7 @@ export default function Pacientes() {
     );
   });
 
+  // Estadísticas
   const total = pacientes.length;
   const mujeres = pacientes.filter((p) => p.genero === "F").length;
   const hombres = pacientes.filter((p) => p.genero === "M").length;
@@ -51,31 +70,46 @@ export default function Pacientes() {
 
   return (
     <div className="layout">
-      
+
       {/* SIDEBAR */}
       <aside className="sidebar">
         <div className="user-section">
-          <span>👤</span> Usuario
+          <FaUser /> Usuario
         </div>
 
         <ul>
-          <li onClick={() => navigate("/pacientes")} className="active">Pacientes</li>
-          <li onClick={() => navigate("/citas")}>Citas</li>
-          <li onClick={() => navigate("/medicos")}>Médicos</li>
-          <li onClick={() => navigate("/facturacion")}>Facturación</li>
-          <li onClick={() => navigate("/reportes")}>Reportes</li>
+          <li className="active">
+            <FaUsers /> Pacientes
+          </li>
+
+          <li onClick={() => navigate("/citas")}>
+            <FaCalendarAlt /> Citas
+          </li>
+
+          <li onClick={() => navigate("/medicos")}>
+            <FaUserMd /> Médicos
+          </li>
+
+          <li onClick={() => navigate("/facturacion")}>
+            <FaFileInvoice /> Facturación
+          </li>
+
+          <li onClick={() => navigate("/reportes")}>
+            <FaChartBar /> Reportes
+          </li>
         </ul>
       </aside>
 
-      {/* CONTENIDO PRINCIPAL */}
+      {/* MAIN */}
       <main className="main">
 
+        {/* HEADER */}
         <div className="header">
           <h1>Gestión de Pacientes</h1>
 
           <button
             className="btn-new-invoice"
-            onClick={() => navigate("/nuevo-paciente")}
+            onClick={() => setMostrarModal(true)}
           >
             Nuevo Paciente
           </button>
@@ -146,15 +180,20 @@ export default function Pacientes() {
 
             {filtered.length === 0 && (
               <tr>
-                <td colSpan="6" style={{ textAlign: "center", padding: "20px" }}>
+                <td colSpan="6" style={{ textAlign: "center", padding: 20 }}>
                   No hay resultados.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
-
       </main>
+
+      {/* MODAL NUEVO PACIENTE */}
+      {mostrarModal && (
+        <NuevoPaciente onClose={() => setMostrarModal(false)} />
+      )}
+
     </div>
   );
 }
