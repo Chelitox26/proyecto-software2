@@ -1,70 +1,116 @@
-# Getting Started with Create React App
+# Sistema de Gestión Clínica – Proyecto Final Ingeniería de Software II
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este proyecto corresponde al sistema funcional desarrollado para la asignatura **Ingeniería de Software II**, siguiendo los artefactos generados en Ingeniería de Software I y cumpliendo con los lineamientos técnicos solicitados: arquitectura, patrones, SOLID, trazabilidad y calidad del código.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Cómo ejecutar el proyecto
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# 1) Clonar repositorio
+git clone https://github.com/Chelitox26/proyecto-software2.git
+cd proyecto-software2
 
-### `npm test`
+# 2) Instalar dependencias
+npm install
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# 3) Ejecutar el servidor
+npm run dev o npm start
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# 4) C4 – Level 1 (Contexto)
+[Usuario]
+   │ 
+   ▼ 
+[Sistema de Gestión Clínica ( React)]
+   │
+   │  CRUD Pacientes, Médicos, Citas, Facturación
+   │
+   ▼
+[Firebase Backend]
+      ├── Authentication
+      ├── Firestore Database
+      └── Firestore Security Rules
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# 5) C4 – Level 2 (Contenedores)
+    +---------------------------------------------------------------+
+|                   Frontend (React SPA)                        |
+|  - Páginas: Login, Pacientes, Médicos, Citas, Facturación     |
+|  - Componentes: Formularios, Modales, Reutilizables           |
+|  - Router: navegación SPA                                     |
+|  - Services/: lógica de acceso a datos                        |
++----------------------------|----------------------------------+
+                             |
+                             ▼
++---------------------------------------------------------------+
+|            Backend as a Service (Firebase)                    |
+|  Firestore = Persistencia                                     |
+|  Authentication = Manejo de usuarios                           |
+|                                                               |
+|  Colecciones utilizadas:                                      |
+|   • pacientes                                                 |
+|   • medicos                                                   |
+|   • citas                                                     |
+|   • facturas                                                  |
+|                                                               |
+|  Reglas de seguridad + validaciones                           |
++---------------------------------------------------------------+
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# 6) Evidencia del uso de principios SOLID
 
-### `npm run eject`
+#✔ SRP — Single Responsibility Principle
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Cada archivo tiene una sola responsabilidad:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+pacientes.jsx → UI
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+pacientesService.js → lógica de datos
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+nuevoPaciente.jsx → formulario
 
-## Learn More
+#✔ OCP — Open/Closed Principle
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Las pantallas no necesitan cambios si Firestore es sustituido.
+Solo se reemplaza la capa services/.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#✔ LSP — Liskov Substitution Principle
 
-### Code Splitting
+Los servicios pueden sustituirse por mocks en pruebas unitarias.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+#✔ ISP — Interface Segregation Principle
 
-### Analyzing the Bundle Size
+Se dividen responsabilidades por módulos:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+pacientesService
 
-### Making a Progressive Web App
+medicosService
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+citasService
 
-### Advanced Configuration
+facturasService
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+#✔ DIP — Dependency Inversion Principle
 
-### Deployment
+Las vistas dependen de una abstracción, no de Firestore.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Ejemplo:
 
-### `npm run build` fails to minify
+getPacientes()
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# 7) Carpetas principales del proyecto 
+src/
+ ├── pages/
+ ├── components/
+ ├── services/
+ ├── firebase.js
+ ├── App.jsx
+ ├── App.css
+
+
+
+
+
+
